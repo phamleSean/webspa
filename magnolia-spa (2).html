@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAGNOLIA — Therapeutic Shampooing & Spa Retreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Tenor+Sans&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --forest:#2e3d28;--forest-mid:#3a4d35;--forest-light:#4e6347;
+  --cream:#f2ebe0;--cream-deep:#e6dccb;
+  --tan:#c4a05a;--tan-light:#d8bc86;
+  --earth:#6b4f3a;--charcoal:#1a1a18;--text-muted:#6e6560;--white:#faf7f2;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Jost',sans-serif;background:var(--white);color:var(--charcoal);overflow-x:hidden;cursor:none;}
+a,button{cursor:none;}
+
+/* CURSOR */
+#cursor-dot{position:fixed;z-index:9999;pointer-events:none;width:8px;height:8px;border-radius:50%;background:var(--tan);transform:translate(-50%,-50%);transition:transform .1s ease,opacity .2s;}
+#cursor-ring{position:fixed;z-index:9998;pointer-events:none;width:36px;height:36px;border:1px solid rgba(196,160,90,.55);border-radius:50%;transform:translate(-50%,-50%);transition:width .35s cubic-bezier(.25,.46,.45,.94),height .35s cubic-bezier(.25,.46,.45,.94),border-color .35s,background .35s,border-radius .35s;}
+#cursor-petal{position:fixed;z-index:9997;pointer-events:none;width:60px;height:60px;transform:translate(-50%,-50%) rotate(0deg);opacity:0;transition:opacity .3s;}
+#cursor-petal svg{width:100%;height:100%;}
+body.cursor-hover #cursor-ring{width:52px;height:52px;border-color:rgba(196,160,90,.85);background:rgba(196,160,90,.08);}
+body.cursor-hover #cursor-dot{transform:translate(-50%,-50%) scale(1.6);}
+body.cursor-card #cursor-ring{width:70px;height:70px;border-color:rgba(196,160,90,.9);border-radius:4px;background:rgba(196,160,90,.06);}
+body.cursor-card #cursor-petal{opacity:1;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:76px;transition:background .4s,border-color .4s,box-shadow .4s;border-bottom:1px solid transparent;}
+nav.scrolled{background:rgba(22,22,20,.97);backdrop-filter:blur(18px);border-bottom-color:rgba(196,160,90,.14);box-shadow:0 2px 40px rgba(0,0,0,.28);}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;color:#fff;letter-spacing:5px;text-transform:uppercase;text-decoration:none;}
+.nav-links{display:flex;gap:36px;list-style:none;}
+.nav-links a{font-family:'Tenor Sans',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.8);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--tan-light);}
+.nav-cta{font-family:'Tenor Sans',sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;padding:12px 28px;background:var(--tan);color:#fff;border:none;transition:background .2s;}
+.nav-cta:hover{background:#a88540;}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;text-align:center;}
+.hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 60% 80% at 28% 50%,rgba(38,52,30,.88) 0%,transparent 68%),radial-gradient(ellipse 55% 65% at 78% 38%,rgba(75,48,26,.65) 0%,transparent 62%),radial-gradient(ellipse 80% 60% at 50% 100%,rgba(14,18,10,.95) 0%,transparent 55%),linear-gradient(155deg,#16190f 0%,#263220 38%,#3c2d18 64%,#110e07 100%);}
+.hero-grain{position:absolute;inset:0;z-index:1;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;}
+.hero-botanical{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none;}
+.hero-content{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;padding:0 24px 160px;animation:hFade 1.4s ease both;}
+@keyframes hFade{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+.hero-eyebrow{font-family:'Tenor Sans',sans-serif;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--tan-light);margin-bottom:28px;display:flex;align-items:center;gap:14px;opacity:0;animation:hFade 1s ease .3s both;}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';display:block;width:36px;height:1px;background:var(--tan);}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(58px,8.5vw,118px);font-weight:300;line-height:1;color:#fff;margin-bottom:16px;letter-spacing:-1px;opacity:0;animation:hFade 1.1s ease .5s both;}
+.hero-title em{font-style:italic;color:var(--tan-light);}
+.hero-subtitle{font-size:14px;font-weight:300;letter-spacing:.5px;color:rgba(255,255,255,.58);margin-bottom:52px;max-width:440px;line-height:1.85;opacity:0;animation:hFade 1.1s ease .7s both;}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;opacity:0;animation:hFade 1.1s ease .9s both;}
+.h-btn-fill{font-family:'Tenor Sans',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:18px 44px;background:var(--tan);color:#fff;border:none;transition:background .2s,transform .15s;}
+.h-btn-fill:hover{background:#a88540;transform:translateY(-2px);}
+.h-btn-out{font-family:'Tenor Sans',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:17px 44px;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.42);transition:border-color .2s,background .2s,transform .15s;text-decoration:none;display:inline-flex;align-items:center;}
+.h-btn-out:hover{border-color:var(--tan-light);background:rgba(196,160,90,.1);transform:translateY(-2px);}
+.hero-scroll{position:absolute;bottom:148px;left:50%;transform:translateX(-50%);z-index:10;opacity:0;animation:hFade 1s ease 1.5s both;}
+.scroll-bar{width:1px;height:48px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,.5));animation:sDrop 2s ease-in-out infinite;}
+@keyframes sDrop{0%,100%{transform:scaleY(.4);opacity:.4;}50%{transform:scaleY(1);opacity:1;}}
+.hero-locs{position:absolute;bottom:0;left:0;right:0;z-index:10;display:grid;grid-template-columns:1fr 1px 1fr;border-top:1px solid rgba(255,255,255,.1);background:rgba(10,12,8,.6);backdrop-filter:blur(14px);opacity:0;animation:hFade 1s ease 1.2s both;}
+.hloc-divider{background:rgba(255,255,255,.1);}
+.hloc{padding:28px 40px;text-align:center;}
+.hloc-name{font-family:'Tenor Sans',sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:var(--tan-light);margin-bottom:10px;}
+.hloc-addr{font-size:12px;font-weight:300;color:rgba(255,255,255,.55);line-height:1.85;}
+
+/* PALETTE */
+.palette-bar{display:flex;height:5px;}
+.palette-bar span{flex:1;}
+
+/* TICKER */
+.values-strip{padding:50px 0;background:var(--forest);overflow:hidden;}
+.values-ticker{display:flex;gap:70px;align-items:center;animation:ticker 30s linear infinite;white-space:nowrap;}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.ticker-item{display:flex;align-items:center;gap:18px;font-family:'Tenor Sans',sans-serif;font-size:11px;letter-spacing:3.5px;text-transform:uppercase;color:rgba(242,235,224,.6);flex-shrink:0;}
+.ticker-dot{width:5px;height:5px;border-radius:50%;background:var(--tan);flex-shrink:0;}
+
+/* SECTION BASE */
+section{position:relative;}
+.section-inner{max-width:1180px;margin:0 auto;padding:0 60px;}
+.section-tag{font-family:'Tenor Sans',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--tan);margin-bottom:18px;display:flex;align-items:center;gap:14px;}
+.section-tag::before{content:'';display:block;width:28px;height:1px;background:var(--tan);}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,4.5vw,60px);font-weight:300;line-height:1.08;color:var(--forest);}
+.section-title em{font-style:italic;color:var(--tan);}
+
+/* PHILOSOPHY */
+.philosophy{padding:0;background:var(--charcoal);overflow:hidden;position:relative;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;}
+.phil-left{position:relative;display:flex;flex-direction:column;justify-content:center;padding:120px 80px 120px 100px;background:var(--charcoal);z-index:2;}
+.phil-left .section-tag{color:var(--tan-light);}
+.phil-left .section-tag::before{background:var(--tan-light);}
+.phil-left .section-title{color:#fff;margin-bottom:40px;}
+.phil-left .section-title em{color:var(--tan-light);}
+.phil-body{font-size:14px;font-weight:300;line-height:2;color:rgba(242,235,224,.62);margin-bottom:16px;}
+.phil-values{display:flex;flex-direction:column;gap:0;margin:40px 0 48px;}
+.phil-value{display:flex;align-items:center;gap:20px;padding:20px 0;border-bottom:1px solid rgba(255,255,255,.07);}
+.phil-value:first-child{border-top:1px solid rgba(255,255,255,.07);}
+.pv-num{font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--tan);width:28px;flex-shrink:0;}
+.pv-name{font-family:'Tenor Sans',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(242,235,224,.85);flex:1;}
+.pv-desc{font-size:12px;font-weight:300;color:rgba(242,235,224,.42);max-width:200px;text-align:right;line-height:1.6;}
+.phil-cta-btn{font-family:'Tenor Sans',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;padding:16px 38px;background:var(--tan);color:#fff;border:none;transition:background .2s;display:inline-block;}
+.phil-cta-btn:hover{background:#a88540;}
+.phil-right{position:relative;overflow:hidden;background:var(--forest-mid);}
+.phil-right-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.phil-botanical-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 60% 40%,rgba(46,61,40,.8) 0%,transparent 70%),radial-gradient(ellipse 50% 50% at 30% 80%,rgba(107,79,58,.5) 0%,transparent 60%),#1e2818;}
+.phil-quote-wrap{position:relative;z-index:2;padding:60px;text-align:center;}
+.phil-quote-mark{font-family:'Cormorant Garamond',serif;font-size:120px;line-height:.6;color:rgba(196,160,90,.25);display:block;margin-bottom:16px;}
+.phil-quote{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,2.6vw,36px);font-weight:300;font-style:italic;color:rgba(242,235,224,.9);line-height:1.6;margin-bottom:28px;}
+.phil-quote-attr{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--tan-light);display:flex;align-items:center;gap:12px;justify-content:center;}
+.phil-quote-attr::before,.phil-quote-attr::after{content:'';display:block;width:24px;height:1px;background:var(--tan);}
+.phil-stats{position:absolute;bottom:0;left:0;right:0;z-index:3;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.3);backdrop-filter:blur(10px);}
+.phil-stat{padding:28px 24px;text-align:center;border-right:1px solid rgba(255,255,255,.06);}
+.phil-stat:last-child{border-right:none;}
+.ps-num{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:#fff;line-height:1;}
+.ps-label{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(242,235,224,.45);margin-top:6px;line-height:1.5;}
+.phil-botanical-svg{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.28;}
+
+/* SERVICES */
+.services{padding:130px 0;background:var(--cream);}
+.services-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:60px;}
+.services-intro{max-width:300px;font-size:14px;font-weight:300;line-height:1.85;color:var(--text-muted);}
+.service-tabs{display:flex;margin-bottom:4px;border-bottom:1px solid rgba(58,77,53,.18);}
+.stab{font-family:'Tenor Sans',sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;padding:14px 28px 14px 0;color:var(--text-muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;background:none;border-left:none;border-top:none;border-right:none;}
+.stab.active{color:var(--forest);border-bottom-color:var(--forest);}
+.stab:hover{color:var(--forest);}
+.service-panel{display:none;}
+.service-panel.active{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;}
+.service-card{background:var(--white);padding:44px 36px;transition:background .25s,transform .2s;position:relative;overflow:hidden;}
+.service-card::after{content:'Đặt lịch ngay';position:absolute;bottom:-40px;left:0;right:0;background:var(--tan);color:#fff;text-align:center;font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;padding:12px;transition:bottom .25s ease;}
+.service-card:hover{background:var(--forest);transform:translateY(-3px);}
+.service-card:hover::after{bottom:0;}
+.service-card:hover .sc-num,.service-card:hover .sc-title,.service-card:hover .sc-desc,.service-card:hover .sc-price,.service-card:hover .sc-dur{color:var(--cream)!important;}
+.service-card:hover .sc-tag{background:rgba(255,255,255,.12);color:var(--cream);}
+.sc-num{font-family:'Tenor Sans',sans-serif;font-size:11px;color:var(--tan);margin-bottom:26px;letter-spacing:1px;transition:color .25s;}
+.sc-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:var(--forest);margin-bottom:14px;line-height:1.2;transition:color .25s;}
+.sc-desc{font-size:13px;font-weight:300;line-height:1.85;color:var(--text-muted);margin-bottom:28px;transition:color .25s;}
+.sc-meta{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.sc-price{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:var(--forest);transition:color .25s;}
+.sc-dur{font-size:11px;font-weight:300;color:var(--text-muted);margin-top:4px;transition:color .25s;}
+.sc-tag{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:5px 13px;background:var(--cream-deep);color:var(--text-muted);transition:all .25s;}
+#panel-custom.active{grid-template-columns:1fr 1fr;}
+.custom-hero-card{background:var(--forest);padding:50px 44px;grid-column:1/-1;position:relative;overflow:hidden;}
+.custom-hero-card::after{content:'Đặt lịch ngay';background:var(--tan);}
+.custom-hero-card:hover{background:#3a5032;transform:none;}
+.custom-hero-card .sc-num,.custom-hero-card .sc-title,.custom-hero-card .sc-desc{color:var(--cream)!important;}
+.custom-hero-card .sc-tag{background:rgba(255,255,255,.12);color:var(--cream);}
+.ctc{background:var(--white);padding:36px;transition:background .25s;position:relative;overflow:hidden;}
+.ctc::after{content:'Đặt lịch ngay';position:absolute;bottom:-40px;left:0;right:0;background:var(--tan);color:#fff;text-align:center;font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;padding:12px;transition:bottom .25s ease;}
+.ctc:hover{background:var(--forest);}
+.ctc:hover::after{bottom:0;}
+.ctc:hover .ctc-title,.ctc:hover .ctc-desc{color:var(--cream)!important;}
+.ctc:hover .ctc-price{color:var(--tan-light)!important;}
+.ctc-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--forest);margin-bottom:10px;transition:color .25s;}
+.ctc-price{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--tan);margin-bottom:10px;transition:color .25s;}
+.ctc-desc{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.75;transition:color .25s;}
+
+/* EXPERIENCE horizontal */
+.experience{padding:130px 0;background:var(--white);overflow:hidden;}
+.exp-header{margin-bottom:80px;}
+.exp-header .section-title{margin-top:14px;}
+.exp-track{display:flex;gap:0;position:relative;}
+.exp-track::before{content:'';position:absolute;top:44px;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--tan),rgba(196,160,90,.3),var(--tan),transparent);}
+.exp-step-h{flex:1;padding:0 24px;position:relative;}
+.exp-dot{width:12px;height:12px;border-radius:50%;background:var(--cream-deep);border:2px solid rgba(196,160,90,.5);margin:38px auto 0;position:relative;z-index:2;transition:background .3s,border-color .3s,transform .3s;}
+.exp-step-h.active .exp-dot,.exp-step-h:hover .exp-dot{background:var(--tan);border-color:var(--tan);transform:scale(1.4);}
+.exp-step-num{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--tan);text-align:center;margin-bottom:14px;transition:color .3s;}
+.exp-step-body{padding-top:28px;text-align:center;opacity:.42;transform:translateY(6px);transition:opacity .4s,transform .4s;}
+.exp-step-h.active .exp-step-body,.exp-step-h:hover .exp-step-body{opacity:1;transform:translateY(0);}
+.exp-step-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--forest);margin-bottom:10px;line-height:1.2;}
+.exp-detail-panel{display:none;margin-top:60px;background:var(--cream);padding:50px 60px;animation:panelIn .4s ease both;position:relative;}
+@keyframes panelIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.exp-detail-panel.visible{display:grid;grid-template-columns:1fr 2fr;gap:60px;align-items:center;}
+.edp-num{font-family:'Cormorant Garamond',serif;font-size:100px;font-weight:300;color:rgba(46,61,40,.08);line-height:1;margin-bottom:-20px;}
+.edp-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;color:var(--forest);margin-bottom:16px;line-height:1.1;}
+.edp-desc{font-size:14px;font-weight:300;color:var(--text-muted);line-height:1.95;}
+.edp-tag{display:inline-block;margin-top:22px;font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;padding:7px 18px;border:1px solid var(--tan);color:var(--tan);}
+.edp-close{position:absolute;top:24px;right:24px;background:none;border:none;color:var(--text-muted);font-size:22px;padding:4px 8px;transition:color .2s;}
+.edp-close:hover{color:var(--charcoal);}
+
+/* MEMBERSHIP */
+.membership{padding:130px 0;background:var(--cream);}
+.mem-header{text-align:center;margin-bottom:70px;}
+.mem-header .section-tag{justify-content:center;}
+.mem-header .section-tag::before{display:none;}
+.mem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;}
+.mem-card{padding:50px 40px;background:var(--white);position:relative;}
+.mem-card.featured{background:var(--forest);}
+.mem-card.featured *{color:var(--cream)!important;}
+.mem-badge{position:absolute;top:26px;right:26px;font-family:'Tenor Sans',sans-serif;font-size:8px;letter-spacing:2.5px;text-transform:uppercase;padding:5px 13px;background:var(--tan);color:#fff!important;}
+.mem-tier{font-family:'Tenor Sans',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--tan);margin-bottom:14px;}
+.mem-name{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--forest);margin-bottom:32px;line-height:1;}
+.mem-perks{list-style:none;display:flex;flex-direction:column;gap:13px;margin-bottom:40px;}
+.mem-perks li{font-size:13px;font-weight:300;color:var(--text-muted);padding-left:20px;position:relative;line-height:1.65;}
+.mem-perks li::before{content:'—';position:absolute;left:0;color:var(--tan);}
+.mem-btn{font-family:'Tenor Sans',sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;padding:13px 28px;text-decoration:none;transition:all .2s;display:inline-block;border:none;}
+.mem-btn-out{border:1px solid var(--forest);color:var(--forest);background:transparent;}
+.mem-btn-out:hover{background:var(--forest);color:#fff;}
+.mem-btn-solid{background:var(--tan);color:#fff;}
+.mem-btn-solid:hover{background:#a88540;}
+
+/* BOOKING BAND */
+.booking-band{padding:100px 0;background:var(--forest);text-align:center;}
+.booking-band .section-tag{justify-content:center;color:var(--tan-light);}
+.booking-band .section-tag::before{display:none;}
+.booking-band .section-title{color:#fff;margin-bottom:18px;}
+.booking-band .section-title em{color:var(--tan-light);}
+.booking-desc{font-size:14px;font-weight:300;color:rgba(242,235,224,.62);max-width:440px;margin:0 auto 46px;line-height:1.85;}
+.band-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.band-info{margin-top:56px;display:flex;justify-content:center;gap:60px;flex-wrap:wrap;}
+.band-info-item{text-align:center;}
+.band-info-item span:first-child{display:block;font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--tan-light);margin-bottom:6px;}
+.band-info-item span:last-child{font-size:13px;font-weight:300;color:rgba(242,235,224,.68);}
+
+/* FOOTER */
+footer{background:#0e100c;padding:80px 0 40px;}
+.footer-inner{max-width:1180px;margin:0 auto;padding:0 60px;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;margin-bottom:60px;}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:#fff;letter-spacing:5px;text-transform:uppercase;text-decoration:none;display:block;margin-bottom:18px;}
+.footer-tagline{font-size:13px;font-weight:300;color:rgba(242,235,224,.4);line-height:1.9;max-width:240px;}
+.footer-col-title{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--tan);margin-bottom:22px;}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:13px;}
+.footer-links a{font-size:13px;font-weight:300;color:rgba(242,235,224,.5);text-decoration:none;transition:color .2s;}
+.footer-links a:hover{color:var(--tan-light);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.07);padding-top:28px;display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:11px;font-weight:300;color:rgba(242,235,224,.28);}
+.footer-socials{display:flex;gap:22px;}
+.footer-socials a{font-family:'Tenor Sans',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(242,235,224,.42);text-decoration:none;transition:color .2s;}
+.footer-socials a:hover{color:var(--tan-light);}
+
+/* POPUP */
+.popup-overlay{position:fixed;inset:0;z-index:1000;background:rgba(10,12,8,.8);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .35s;padding:20px;}
+.popup-overlay.open{opacity:1;pointer-events:all;}
+.popup{background:var(--white);width:100%;max-width:620px;max-height:92vh;overflow-y:auto;position:relative;transform:translateY(20px);transition:transform .35s ease;scrollbar-width:none;}
+.popup::-webkit-scrollbar{display:none;}
+.popup-overlay.open .popup{transform:translateY(0);}
+.popup-header{padding:36px 44px 0;display:flex;align-items:flex-start;justify-content:space-between;}
+.popup-brand{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:400;letter-spacing:4px;text-transform:uppercase;color:var(--tan);}
+.popup-close{width:32px;height:32px;background:none;border:none;display:flex;align-items:center;justify-content:center;color:var(--text-muted);padding:0;transition:color .2s;}
+.popup-close:hover{color:var(--charcoal);}
+.step-indicator{display:flex;align-items:center;padding:26px 44px 0;}
+.step-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Tenor Sans',sans-serif;font-size:10px;border:1px solid rgba(58,77,53,.2);color:var(--text-muted);transition:all .3s;flex-shrink:0;background:#fff;}
+.step-dot.active{background:var(--forest);border-color:var(--forest);color:#fff;}
+.step-dot.done{background:var(--tan);border-color:var(--tan);color:#fff;}
+.step-line{flex:1;height:1px;background:rgba(58,77,53,.15);margin:0 8px;}
+.step-line.done{background:var(--tan);}
+.popup-body{padding:32px 44px 44px;}
+.step-pane{display:none;}
+.step-pane.active{display:block;}
+.popup-step-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--forest);margin-bottom:6px;line-height:1.1;}
+.popup-step-sub{font-size:13px;font-weight:300;color:var(--text-muted);margin-bottom:28px;line-height:1.7;}
+.preselect-badge{display:inline-flex;align-items:center;gap:10px;margin-bottom:22px;padding:10px 18px;background:rgba(58,77,53,.08);border:1px solid rgba(58,77,53,.18);font-size:13px;font-weight:300;color:var(--forest);}
+.preselect-badge .pb-label{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tan);}
+.option-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;}
+.option-card{border:1px solid rgba(58,77,53,.18);padding:20px;transition:all .2s;position:relative;}
+.option-card:hover{border-color:var(--forest);background:rgba(58,77,53,.03);}
+.option-card.selected{border-color:var(--forest);background:rgba(58,77,53,.06);}
+.option-card.selected::after{content:'';position:absolute;top:10px;right:12px;width:16px;height:16px;background:var(--forest);border-radius:50%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 8l3.5 3.5L13 5' stroke='white' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-size:contain;}
+.oc-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--forest);margin-bottom:4px;}
+.oc-dur{font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tan);margin-bottom:8px;}
+.oc-desc{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.6;}
+.oc-price{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--forest);margin-top:12px;}
+.pop-form-row{margin-bottom:18px;}
+.pop-label{display:block;font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;}
+.pop-input,.pop-select{width:100%;padding:13px 16px;border:1px solid rgba(58,77,53,.22);background:#fff;font-family:'Jost',sans-serif;font-size:14px;font-weight:300;color:var(--charcoal);outline:none;transition:border-color .2s;-webkit-appearance:none;border-radius:0;}
+.pop-input:focus,.pop-select:focus{border-color:var(--forest);}
+.pop-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.popup-nav{display:flex;align-items:center;justify-content:space-between;margin-top:30px;padding-top:22px;border-top:1px solid rgba(58,77,53,.1);}
+.popup-back{font-family:'Tenor Sans',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);background:none;border:none;padding:0;display:flex;align-items:center;gap:8px;transition:color .2s;}
+.popup-back:hover{color:var(--forest);}
+.popup-back svg{width:14px;height:14px;}
+.popup-next{font-family:'Tenor Sans',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;padding:16px 38px;background:var(--forest);color:#fff;border:none;transition:background .2s;}
+.popup-next:hover{background:var(--forest-light,#4e6347);}
+.popup-next:disabled{background:rgba(58,77,53,.22);}
+.popup-success{padding:20px 44px 52px;text-align:center;display:none;}
+.success-circle{width:70px;height:70px;border-radius:50%;background:rgba(46,61,40,.1);margin:0 auto 24px;display:flex;align-items:center;justify-content:center;}
+.success-circle svg{width:32px;height:32px;}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--forest);margin-bottom:12px;}
+.success-msg{font-size:13px;font-weight:300;color:var(--text-muted);line-height:1.8;}
+.success-detail{margin-top:28px;padding:20px;background:var(--cream);text-align:left;font-size:13px;font-weight:300;color:var(--text-muted);line-height:1.9;}
+.success-detail strong{color:var(--forest);font-weight:400;}
+
+/* FADE UP */
+.fade-up{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}
+
+@media(max-width:1024px){
+  nav{padding:0 30px;}.nav-links{display:none;}
+  .section-inner{padding:0 30px;}
+  .philosophy{grid-template-columns:1fr;min-height:auto;}
+  .phil-left{padding:80px 40px;}
+  .service-panel.active{grid-template-columns:1fr 1fr;}
+  #panel-custom.active{grid-template-columns:1fr;}
+  .exp-track{flex-wrap:wrap;}
+  .exp-step-h{flex:0 0 50%;}
+  .mem-grid{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+  .services-header{flex-direction:column;gap:20px;align-items:flex-start;}
+  .hero-locs{grid-template-columns:1fr;}.hloc-divider{display:none;}
+}
+@media(max-width:640px){
+  .hero-title{font-size:52px;}
+  .service-panel.active,.mem-grid,.pop-form-grid,.option-grid{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr;}
+  .popup-body{padding:24px 28px 36px;}
+  .popup-header{padding:28px 28px 0;}
+  .step-indicator{padding:20px 28px 0;}
+  .popup-success{padding:16px 28px 40px;}
+  .exp-detail-panel.visible{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="cursor-petal">
+<svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M30 5 Q34 16 30 30 Q26 16 30 5Z" fill="rgba(196,160,90,.5)" stroke="rgba(196,160,90,.7)" stroke-width=".6"/>
+<path d="M45 11 Q44 23 34 30 Q38 18 45 11Z" fill="rgba(196,160,90,.4)" stroke="rgba(196,160,90,.6)" stroke-width=".6"/>
+<path d="M52 26 Q44 33 30 30 Q42 26 52 26Z" fill="rgba(196,160,90,.4)" stroke="rgba(196,160,90,.6)" stroke-width=".6"/>
+<path d="M47 43 Q38 37 34 30 Q42 38 47 43Z" fill="rgba(196,160,90,.4)" stroke="rgba(196,160,90,.6)" stroke-width=".6"/>
+<path d="M30 55 Q26 44 30 30 Q34 44 30 55Z" fill="rgba(196,160,90,.5)" stroke="rgba(196,160,90,.7)" stroke-width=".6"/>
+<path d="M13 43 Q22 37 30 30 Q18 38 13 43Z" fill="rgba(196,160,90,.4)" stroke="rgba(196,160,90,.6)" stroke-width=".6"/>
+<path d="M8 26 Q18 26 30 30 Q16 33 8 26Z" fill="rgba(196,160,90,.4)" stroke="rgba(196,160,90,.6)" stroke-width=".6"/>
+<path d="M15 11 Q22 18 26 30 Q16 23 15 11Z" fill="rgba(196,160,90,.4)" stroke="rgba(196,160,90,.6)" stroke-width=".6"/>
+<circle cx="30" cy="30" r="4" fill="rgba(196,160,90,.6)" stroke="rgba(196,160,90,.9)" stroke-width=".8"/>
+</svg>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#top" class="nav-logo">Magnolia</a>
+  <ul class="nav-links">
+    <li><a href="#philosophy">Triết lý</a></li>
+    <li><a href="#services">Dịch vụ</a></li>
+    <li><a href="#experience">Quy trình</a></li>
+    <li><a href="#membership">Membership</a></li>
+    <li><a href="#booking-band">Liên hệ</a></li>
+  </ul>
+  <button class="nav-cta" onclick="openPopup()">Đặt lịch ngay</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-botanical">
+    <svg viewBox="0 0 1440 900" width="100%" height="100%" fill="none" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;opacity:.2;">
+      <path d="M-80 920 C20 760 110 610 210 490 C275 400 338 348 400 285" stroke="#c4a05a" stroke-width="1.5" fill="none"/>
+      <path d="M210 490 C188 448 176 406 196 364 C216 334 248 334 266 366 C276 386 270 428 244 456 C224 474 210 490 210 490Z" fill="rgba(196,160,90,.28)" stroke="#c4a05a" stroke-width=".8"/>
+      <path d="M290 376 C268 344 258 308 276 280 C292 257 318 260 330 284 C340 306 334 342 312 362Z" fill="rgba(196,160,90,.24)" stroke="#c4a05a" stroke-width=".8"/>
+      <path d="M165 570 C135 518 115 466 144 424 C164 403 188 412 195 436 C200 454 188 496 165 570Z" fill="rgba(46,61,40,.48)" stroke="rgba(46,61,40,.55)" stroke-width="1"/>
+      <path d="M1210 920 C1262 808 1312 706 1342 582 C1368 462 1368 358 1345 258" stroke="rgba(78,99,71,.55)" stroke-width="1.5" fill="none"/>
+      <path d="M1342 582 C1372 560 1400 528 1410 493 C1418 461 1404 435 1378 433 C1356 432 1338 454 1336 482 C1334 510 1338 548 1342 582Z" fill="rgba(46,61,40,.32)" stroke="rgba(78,99,71,.48)" stroke-width=".8"/>
+      <g opacity=".18">
+        <circle cx="720" cy="430" r="85" fill="rgba(196,160,90,.06)" stroke="rgba(196,160,90,.14)" stroke-width="1"/>
+        <path d="M720 345 Q742 374 720 430 Q698 374 720 345" fill="rgba(196,160,90,.14)" stroke="rgba(196,160,90,.24)" stroke-width=".8"/>
+        <path d="M780 402 Q764 408 732 420 Q752 398 780 402" fill="rgba(196,160,90,.12)" stroke="rgba(196,160,90,.2)" stroke-width=".8"/>
+        <path d="M720 460 Q698 432 720 408 Q742 432 720 460" fill="rgba(196,160,90,.14)" stroke="rgba(196,160,90,.24)" stroke-width=".8"/>
+        <path d="M660 402 Q678 398 708 420 Q688 408 660 402" fill="rgba(196,160,90,.12)" stroke="rgba(196,160,90,.2)" stroke-width=".8"/>
+        <circle cx="720" cy="415" r="20" fill="rgba(196,160,90,.22)" stroke="rgba(196,160,90,.45)" stroke-width=".8"/>
+      </g>
+    </svg>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Ho Chi Minh City · Micro-Retreat Spa</div>
+    <h1 class="hero-title">Nơi bạn<br><em>thở lại</em></h1>
+    <p class="hero-subtitle">Liệu pháp gội đầu trị liệu đa giác quan —<br>được cá nhân hóa hoàn toàn cho từng bạn.</p>
+    <div class="hero-actions">
+      <button class="h-btn-fill" onclick="openPopup()">Đặt lịch với Magnolia</button>
+      <a href="#services" class="h-btn-out">Xem dịch vụ</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-bar"></div></div>
+  <div class="hero-locs">
+    <div class="hloc"><div class="hloc-name">Magnolia Q1 · Q3</div><div class="hloc-addr">Quận 1 &amp; Quận 3, TP. Hồ Chí Minh<br>Zalo · Facebook · 0901 234 567<br>Mở cửa 9:00 – 21:00 · Hàng ngày</div></div>
+    <div class="hloc-divider"></div>
+    <div class="hloc"><div class="hloc-name">Magnolia Q7</div><div class="hloc-addr">Quận 7, TP. Hồ Chí Minh<br>Zalo · Facebook · 0901 234 568<br>Mở cửa 9:00 – 21:00 · Hàng ngày</div></div>
+  </div>
+</section>
+
+<!-- PALETTE BAR -->
+<div class="palette-bar"><span style="background:#2e3d28;"></span><span style="background:#f2ebe0;"></span><span style="background:#c4a05a;"></span><span style="background:#e6dccb;"></span><span style="background:#6b4f3a;"></span></div>
+
+<!-- TICKER -->
+<div class="values-strip"><div class="values-ticker">
+  <div class="ticker-item"><div class="ticker-dot"></div>Attentive Listening</div>
+  <div class="ticker-item"><div class="ticker-dot"></div>Deep Personalization</div>
+  <div class="ticker-item"><div class="ticker-dot"></div>Holistic Care</div>
+  <div class="ticker-item"><div class="ticker-dot"></div>Multi-Sensory Retreat</div>
+  <div class="ticker-item"><div class="ticker-dot"></div>Therapeutic Touch</div>
+  <div class="ticker-item"><div class="ticker-dot"></div>Urban Micro-Retreat</div>
+  <div class="ticker-item"><div class="ticker-dot"></div>Attentive Listening</div>
+  <div class="ticker-item"><div class="ticker-dot"></div>Deep Personalization</div>
+  <div class="ticker-item"><div class="ticker-dot"></div>Holistic Care</div>
+  <div class="ticker-item"><div class="ticker-dot"></div>Multi-Sensory Retreat</div>
+  <div class="ticker-item"><div class="ticker-dot"></div>Therapeutic Touch</div>
+  <div class="ticker-item"><div class="ticker-dot"></div>Urban Micro-Retreat</div>
+</div></div>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy" id="philosophy">
+  <div class="phil-left fade-up">
+    <div class="section-tag">Triết lý</div>
+    <h2 class="section-title">Nghỉ ngơi<br>là một <em>nghệ thuật</em></h2>
+    <p class="phil-body" style="margin-top:30px;">MAGNOLIA ra đời từ một niềm tin: sự nghỉ ngơi sâu và có chủ đích có thể phục hồi cả thể xác lẫn trạng thái nội tâm — giúp bạn cảm thấy cân bằng và tươi mới từ bên trong.</p>
+    <div class="phil-values">
+      <div class="phil-value"><span class="pv-num">01</span><span class="pv-name">Attentive Listening</span><span class="pv-desc">Lắng nghe từng khách hàng một</span></div>
+      <div class="phil-value"><span class="pv-num">02</span><span class="pv-name">Deep Personalization</span><span class="pv-desc">Cá nhân hóa từng chi tiết nhỏ</span></div>
+      <div class="phil-value"><span class="pv-num">03</span><span class="pv-name">Holistic Care</span><span class="pv-desc">Chăm sóc toàn diện cơ thể &amp; tâm trí</span></div>
+    </div>
+    <button class="phil-cta-btn" onclick="openPopup()">Đặt lịch trải nghiệm</button>
+  </div>
+  <div class="phil-right">
+    <div class="phil-botanical-bg"></div>
+    <svg class="phil-botanical-svg" viewBox="0 0 720 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M80 880 C120 760 200 580 360 380 C520 180 620 100 680 40" stroke="#c4a05a" stroke-width="1.8" fill="none"/>
+      <path d="M360 380 C320 320 300 260 330 210 C355 170 395 175 410 210 C420 240 410 300 360 380Z" fill="rgba(196,160,90,.18)" stroke="#c4a05a" stroke-width=".8"/>
+      <path d="M440 280 C405 228 395 175 420 142 C440 116 472 120 482 148 C490 170 478 220 440 280Z" fill="rgba(196,160,90,.15)" stroke="#c4a05a" stroke-width=".8"/>
+      <path d="M180 660 C145 600 130 538 158 492 C178 462 210 468 220 498 C228 520 215 576 180 660Z" fill="rgba(46,61,40,.4)" stroke="rgba(46,61,40,.5)" stroke-width="1"/>
+      <path d="M260 580 C235 530 228 468 255 432 C274 406 304 414 312 444 C318 466 305 520 260 580Z" fill="rgba(46,61,40,.35)" stroke="rgba(46,61,40,.45)" stroke-width="1"/>
+      <g transform="translate(560,200)">
+        <path d="M0 -50 Q10 -28 0 0 Q-10 -28 0 -50Z" fill="rgba(196,160,90,.28)" stroke="rgba(196,160,90,.55)" stroke-width=".8"/>
+        <path d="M35 -35 Q28 -14 12 0 Q16 -24 35 -35Z" fill="rgba(196,160,90,.24)" stroke="rgba(196,160,90,.48)" stroke-width=".8"/>
+        <path d="M48 5 Q26 8 12 0 Q30 -5 48 5Z" fill="rgba(196,160,90,.24)" stroke="rgba(196,160,90,.48)" stroke-width=".8"/>
+        <path d="M35 44 Q20 26 12 0 Q28 18 35 44Z" fill="rgba(196,160,90,.24)" stroke="rgba(196,160,90,.48)" stroke-width=".8"/>
+        <path d="M0 50 Q-10 28 0 0 Q10 28 0 50Z" fill="rgba(196,160,90,.28)" stroke="rgba(196,160,90,.55)" stroke-width=".8"/>
+        <path d="M-35 44 Q-20 26 -12 0 Q-28 18 -35 44Z" fill="rgba(196,160,90,.24)" stroke="rgba(196,160,90,.48)" stroke-width=".8"/>
+        <path d="M-48 5 Q-26 8 -12 0 Q-30 -5 -48 5Z" fill="rgba(196,160,90,.24)" stroke="rgba(196,160,90,.48)" stroke-width=".8"/>
+        <path d="M-35 -35 Q-28 -14 -12 0 Q-16 -24 -35 -35Z" fill="rgba(196,160,90,.24)" stroke="rgba(196,160,90,.48)" stroke-width=".8"/>
+        <circle cx="0" cy="0" r="12" fill="rgba(196,160,90,.35)" stroke="rgba(196,160,90,.7)" stroke-width="1"/>
+      </g>
+    </svg>
+    <div class="phil-right-inner">
+      <div class="phil-quote-wrap">
+        <span class="phil-quote-mark">"</span>
+        <p class="phil-quote">Đôi khi điều bạn cần không phải là một kỳ nghỉ dài — mà là một buổi sáng chỉ dành cho chính mình.</p>
+        <div class="phil-quote-attr">Magnolia · Triết lý sáng lập</div>
+      </div>
+    </div>
+    <div class="phil-stats">
+      <div class="phil-stat"><div class="ps-num">360°</div><div class="ps-label">Chăm sóc toàn diện</div></div>
+      <div class="phil-stat"><div class="ps-num">100%</div><div class="ps-label">Cá nhân hóa</div></div>
+      <div class="phil-stat"><div class="ps-num">45'</div><div class="ps-label">Đủ để thay đổi ngày</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-inner">
+    <div class="services-header">
+      <div>
+        <div class="section-tag fade-up">Dịch vụ</div>
+        <h2 class="section-title fade-up d1">Được thiết kế<br>riêng cho <em>bạn</em></h2>
+      </div>
+      <p class="services-intro fade-up d2">Nhấp vào dịch vụ để đặt lịch ngay — ba hướng trải nghiệm từ phục hồi nhanh đến chăm sóc chuyên sâu.</p>
+    </div>
+    <div class="service-tabs">
+      <button class="stab active" onclick="showTab('fixed',this)">Gói Cố Định</button>
+      <button class="stab" onclick="showTab('deep',this)">Deep Care</button>
+      <button class="stab" onclick="showTab('custom',this)">Custom ✦</button>
+    </div>
+    <div class="service-panel active" id="panel-fixed">
+      <div class="service-card" onclick="openPopupWith('Quick Reset — 45 phút')">
+        <div class="sc-num">01 · Quick Reset</div><div class="sc-title">Phục hồi nhanh</div>
+        <div class="sc-desc">Gội đầu 2 lần, massage da đầu &amp; cổ vai gáy, chăm sóc da mặt cơ bản, xả tóc thư giãn và sấy khô.</div>
+        <div class="sc-meta"><div><div class="sc-price">120k – 200k</div><div class="sc-dur">45 phút</div></div><span class="sc-tag">Phổ biến</span></div>
+      </div>
+      <div class="service-card" onclick="openPopupWith('Deep Care — 90-120 phút')">
+        <div class="sc-num">02 · Deep Care</div><div class="sc-title">Gội dưỡng sinh &amp; massage</div>
+        <div class="sc-desc">Gội trị liệu kết hợp massage tinh dầu hoặc đá nóng toàn thân. Trị liệu cổ vai gáy chuyên sâu, phục hồi tóc và da đầu.</div>
+        <div class="sc-meta"><div><div class="sc-price">Từ 400k</div><div class="sc-dur">90–120 phút · Phòng riêng</div></div><span class="sc-tag">Premium</span></div>
+      </div>
+      <div class="service-card" onclick="openPopupWith('Signature — 90 phút')">
+        <div class="sc-num">03 · Signature</div><div class="sc-title">Chăm sóc toàn diện</div>
+        <div class="sc-desc">Gội dưỡng sinh + hấp tóc + skin-care chuyên sâu + massage cổ vai gáy + sấy tạo kiểu trong phòng riêng.</div>
+        <div class="sc-meta"><div><div class="sc-price">Từ 500k</div><div class="sc-dur">90 phút · Phòng riêng</div></div><span class="sc-tag">Signature</span></div>
+      </div>
+    </div>
+    <div class="service-panel" id="panel-deep">
+      <div class="service-card" onclick="openPopupWith('Hair Treatment — Soi da đầu & hấp phục hồi')">
+        <div class="sc-num">01 · Hair Treatment</div><div class="sc-title">Soi da đầu &amp; hấp phục hồi</div>
+        <div class="sc-desc">Soi tình trạng da đầu, tẩy da chết, gội phục hồi, hấp và đắp mặt nạ tóc, nhấn huyệt thư giãn, sấy tạo kiểu.</div>
+        <div class="sc-meta"><div><div class="sc-price">Từ 300k</div><div class="sc-dur">45 phút</div></div><span class="sc-tag">Hair</span></div>
+      </div>
+      <div class="service-card" onclick="openPopupWith('Deep Facial — Chăm sóc da mặt chuyên sâu')">
+        <div class="sc-num">02 · Deep Facial</div><div class="sc-title">Chăm sóc da mặt chuyên sâu</div>
+        <div class="sc-desc">Tẩy trang, rửa mặt, xông hơi, hút nhân mụn, đắp mặt nạ, massage mặt nâng cơ, thoa kem dưỡng cao cấp.</div>
+        <div class="sc-meta"><div><div class="sc-price">80k – 100k</div><div class="sc-dur">30 phút · Add-on</div></div><span class="sc-tag">Skin</span></div>
+      </div>
+      <div class="service-card" onclick="openPopupWith('Massage Therapy — Trị liệu cổ vai gáy')">
+        <div class="sc-num">03 · Massage Therapy</div><div class="sc-title">Trị liệu cổ vai gáy</div>
+        <div class="sc-desc">Massage trị liệu cổ vai gáy, toàn thân, tay, chân hoặc lưng — cá nhân hóa theo tình trạng và nhu cầu.</div>
+        <div class="sc-meta"><div><div class="sc-price">Từ 150k</div><div class="sc-dur">15–90 phút</div></div><span class="sc-tag">Therapy</span></div>
+      </div>
+    </div>
+    <div class="service-panel" id="panel-custom">
+      <div class="service-card custom-hero-card" onclick="openPopupWith('Custom — Tự thiết kế trải nghiệm')">
+        <div class="sc-num">✦ Gói Signature của MAGNOLIA</div>
+        <div class="sc-title" style="font-size:34px;color:#fff!important;">Tự thiết kế trải nghiệm</div>
+        <div class="sc-desc" style="max-width:580px;color:rgba(242,235,224,.7)!important;">Mua khung thời gian (time box) và tự chọn các micro-service. Hair · Facial · Massage · Mind Relaxation.</div>
+        <div class="sc-meta" style="margin-top:4px;"><span class="sc-tag">Cá nhân hóa hoàn toàn</span></div>
+      </div>
+      <div class="ctc" onclick="openPopupWith('Custom 45 phút — 260,000đ')"><div class="ctc-title">Custom 45 phút</div><div class="ctc-price">260,000đ</div><div class="ctc-desc">Tự chọn micro-services trong 45p.</div></div>
+      <div class="ctc" onclick="openPopupWith('Custom 60 phút — 350,000đ')"><div class="ctc-title">Custom 60 phút</div><div class="ctc-price">350,000đ</div><div class="ctc-desc">Tự chọn micro-services trong 60p.</div></div>
+      <div class="ctc" onclick="openPopupWith('Custom 90 phút — 480,000đ')"><div class="ctc-title">Custom 90 phút</div><div class="ctc-price">480,000đ</div><div class="ctc-desc">Tùy ý 90 phút. Miễn phí phòng VIP Private.</div></div>
+      <div class="ctc" onclick="openPopupWith('Custom 120 phút — 680,000đ')"><div class="ctc-title">Custom 120 phút</div><div class="ctc-price">680,000đ</div><div class="ctc-desc">Trải nghiệm trọn vẹn. Miễn phí phòng VIP Private.</div></div>
+    </div>
+    <div style="margin-top:18px;font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.8;">* Add-on: Dầu gội dưỡng +80k · Olaplex +80k · Skin-care High-end +80k · Đá nóng/đá muối +50k · Phòng VIP Private +80k</div>
+  </div>
+</section>
+
+<!-- EXPERIENCE horizontal -->
+<section class="experience" id="experience">
+  <div class="section-inner">
+    <div class="exp-header fade-up">
+      <div class="section-tag">Quy trình</div>
+      <h2 class="section-title">Từng bước đều <em>có chủ đích</em></h2>
+    </div>
+    <div class="exp-timeline fade-up d2">
+      <div class="exp-track" id="expTrack">
+        <div class="exp-step-h active" onclick="selectStep(0,this)">
+          <div class="exp-step-num">01</div><div class="exp-dot"></div>
+          <div class="exp-step-body"><div class="exp-step-title">Đón tiếp<br>&amp; chào hỏi</div></div>
+        </div>
+        <div class="exp-step-h" onclick="selectStep(1,this)">
+          <div class="exp-step-num">02</div><div class="exp-dot"></div>
+          <div class="exp-step-body"><div class="exp-step-title">Khu chờ<br>thư giãn</div></div>
+        </div>
+        <div class="exp-step-h" onclick="selectStep(2,this)">
+          <div class="exp-step-num">03</div><div class="exp-dot"></div>
+          <div class="exp-step-body"><div class="exp-step-title">Tư vấn<br>cá nhân hóa</div></div>
+        </div>
+        <div class="exp-step-h" onclick="selectStep(3,this)">
+          <div class="exp-step-num">04</div><div class="exp-dot"></div>
+          <div class="exp-step-body"><div class="exp-step-title">Trải nghiệm<br>dịch vụ</div></div>
+        </div>
+        <div class="exp-step-h" onclick="selectStep(4,this)">
+          <div class="exp-step-num">05</div><div class="exp-dot"></div>
+          <div class="exp-step-body"><div class="exp-step-title">Hoàn tất<br>&amp; chăm sóc sau</div></div>
+        </div>
+      </div>
+      <div class="exp-detail-panel visible" id="expDetail">
+        <button class="edp-close" onclick="closeExpDetail()">×</button>
+        <div><div class="edp-num" id="edpNum">01</div></div>
+        <div>
+          <div class="edp-title" id="edpTitle">Đón tiếp &amp; chào hỏi</div>
+          <div class="edp-desc" id="edpDesc">Nhân viên mở cửa, mời trà thảo mộc và xác nhận lịch hẹn. Không gian tách biệt hoàn toàn với thế giới bên ngoài bằng hương thơm và âm thanh thiên nhiên — bạn bắt đầu thở chậm lại ngay từ bước đầu tiên.</div>
+          <span class="edp-tag" id="edpTag">Hospitality · First Impression</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEMBERSHIP -->
+<section class="membership" id="membership">
+  <div class="section-inner">
+    <div class="mem-header fade-up">
+      <div class="section-tag">Membership</div>
+      <h2 class="section-title">Trở thành thành viên<br><em>MAGNOLIA</em></h2>
+    </div>
+    <div class="mem-grid">
+      <div class="mem-card fade-up">
+        <div class="mem-tier">— Hạng Cơ Bản</div><div class="mem-name">Bloom</div>
+        <ul class="mem-perks">
+          <li>Lưu lịch sử dịch vụ &amp; sở thích cá nhân</li><li>Tích điểm: 50k = 1 điểm</li>
+          <li>Dùng điểm nâng cấp sản phẩm, phòng riêng</li><li>Voucher sinh nhật 10%</li>
+          <li>Giảm 5% khi đánh giá trên Google Map</li>
+        </ul>
+        <button class="mem-btn mem-btn-out" onclick="openPopup()">Đăng ký ngay</button>
+      </div>
+      <div class="mem-card featured fade-up d1">
+        <div class="mem-badge">Phổ biến nhất</div>
+        <div class="mem-tier">— Hạng Thường Xuyên</div><div class="mem-name">Magnolia</div>
+        <ul class="mem-perks">
+          <li>Tất cả quyền lợi Bloom</li><li>Ưu tiên đặt lịch giờ cao điểm</li>
+          <li>Voucher dịp lễ 20%</li><li>Thông báo ưu đãi sớm nhất</li>
+          <li>Giảm 50% nếu trải nghiệm không như kỳ vọng</li>
+        </ul>
+        <button class="mem-btn mem-btn-solid" onclick="openPopup()">Nâng cấp ngay</button>
+      </div>
+      <div class="mem-card fade-up d2">
+        <div class="mem-tier">— Hạng VIP</div><div class="mem-name">Blossom</div>
+        <ul class="mem-perks">
+          <li>Tất cả quyền lợi Magnolia</li><li>Miễn phí phòng VIP Private mọi lần</li>
+          <li>Kỹ thuật viên ưu tiên cố định</li><li>Quà tặng cao cấp dịp lễ &amp; sinh nhật</li>
+          <li>Thiền dẫn &amp; chuông xoay theo yêu cầu</li>
+        </ul>
+        <button class="mem-btn mem-btn-out" onclick="openPopup()">Tìm hiểu thêm</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING BAND -->
+<section class="booking-band" id="booking-band">
+  <div class="section-inner">
+    <div class="section-tag fade-up">Đặt lịch</div>
+    <h2 class="section-title fade-up d1">Dành cho bản thân<br><em>một buổi nghỉ ngơi</em></h2>
+    <p class="booking-desc fade-up d2">Chỉ cần 45 phút — bạn có thể bước ra với một trạng thái hoàn toàn khác.</p>
+    <div class="band-actions fade-up d3">
+      <button class="h-btn-fill" onclick="openPopup()">Đặt lịch ngay</button>
+      <a href="tel:+84901234567" class="h-btn-out">Gọi ngay</a>
+    </div>
+    <div class="band-info fade-up d4">
+      <div class="band-info-item"><span>Vị trí</span><span>Q1, Q3, Q7 — TP.HCM</span></div>
+      <div class="band-info-item"><span>Giờ mở cửa</span><span>9:00 – 21:00 · Hàng ngày</span></div>
+      <div class="band-info-item"><span>Liên hệ</span><span>Zalo · Messenger · Điện thoại</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div><a href="#top" class="footer-logo">Magnolia</a><p class="footer-tagline">Therapeutic Shampooing &amp; Spa Retreat — Nơi bạn thở lại giữa ngày dài. Ho Chi Minh City.</p></div>
+      <div><div class="footer-col-title">Dịch vụ</div><ul class="footer-links"><li><a href="#services">Quick Reset</a></li><li><a href="#services">Deep Care</a></li><li><a href="#services">Gói Custom</a></li><li><a href="#services">Massage Therapy</a></li></ul></div>
+      <div><div class="footer-col-title">Khám phá</div><ul class="footer-links"><li><a href="#philosophy">Triết lý</a></li><li><a href="#experience">Quy trình</a></li><li><a href="#membership">Membership</a></li><li><a href="#booking-band">Đặt lịch</a></li></ul></div>
+      <div><div class="footer-col-title">Liên hệ</div><ul class="footer-links"><li><a href="#">Zalo: 0901 234 567</a></li><li><a href="#">Facebook Messenger</a></li><li><a href="#">Q1 · Q3 · Q7 TPHCM</a></li><li><a href="#">9:00 – 21:00 hàng ngày</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 MAGNOLIA Therapeutic Spa. All rights reserved.</div>
+      <div class="footer-socials"><a href="#">Instagram</a><a href="#">Facebook</a><a href="#">TikTok</a><a href="#">Zalo</a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- POPUP -->
+<div class="popup-overlay" id="bookingOverlay" onclick="handleOverlayClick(event)">
+  <div class="popup" id="bookingPopup">
+    <div class="popup-header">
+      <span class="popup-brand">Magnolia · Đặt lịch</span>
+      <button class="popup-close" onclick="closePopup()"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="step-indicator" id="stepIndicator">
+      <div class="step-dot active" id="dot-1">1</div><div class="step-line" id="line-1"></div>
+      <div class="step-dot" id="dot-2">2</div><div class="step-line" id="line-2"></div>
+      <div class="step-dot" id="dot-3">3</div><div class="step-line" id="line-3"></div>
+      <div class="step-dot" id="dot-4">4</div>
+    </div>
+    <div class="popup-body">
+      <!-- STEP 1 -->
+      <div class="step-pane active" id="step-1">
+        <div class="popup-step-title">Chọn gói dịch vụ</div>
+        <div class="popup-step-sub">Mỗi gói được thiết kế phù hợp với nhu cầu và thời gian của bạn.</div>
+        <div id="preselect-badge" class="preselect-badge" style="display:none;"><span class="pb-label">Đã chọn</span><span id="preselect-name" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;font-weight:400;color:var(--forest);"></span></div>
+        <div class="option-grid">
+          <div class="option-card" onclick="selectOption(this,'service','Quick Reset — 45 phút')"><div class="oc-name">Quick Reset</div><div class="oc-dur">45 phút</div><div class="oc-desc">Gội đầu trị liệu, massage da đầu &amp; cổ vai gáy, chăm sóc da mặt cơ bản.</div><div class="oc-price">Từ 120k</div></div>
+          <div class="option-card" onclick="selectOption(this,'service','Deep Care — 90-120 phút')"><div class="oc-name">Deep Care</div><div class="oc-dur">90–120 phút</div><div class="oc-desc">Gội dưỡng sinh + massage tinh dầu/đá nóng. Phòng riêng.</div><div class="oc-price">Từ 400k</div></div>
+          <div class="option-card" onclick="selectOption(this,'service','Signature — 90 phút')"><div class="oc-name">Signature</div><div class="oc-dur">90 phút</div><div class="oc-desc">Tóc + da mặt + massage + sấy tạo kiểu. Phòng cá nhân.</div><div class="oc-price">Từ 500k</div></div>
+          <div class="option-card" onclick="selectOption(this,'service','Custom — Tự thiết kế')"><div class="oc-name">Custom ✦</div><div class="oc-dur">45–120 phút</div><div class="oc-desc">Tự chọn micro-services theo khung thời gian.</div><div class="oc-price">Từ 260k</div></div>
+        </div>
+        <div class="popup-nav"><span></span><button class="popup-next" id="btn-next-1" onclick="goToStep(2)" disabled>Tiếp theo →</button></div>
+      </div>
+      <!-- STEP 2 -->
+      <div class="step-pane" id="step-2">
+        <div class="popup-step-title">Ngày giờ &amp; không gian</div>
+        <div class="popup-step-sub">Chọn thời gian và loại phòng bạn muốn trải nghiệm.</div>
+        <div class="pop-form-grid" style="margin-bottom:18px;">
+          <div class="pop-form-row" style="margin-bottom:0;"><label class="pop-label">Ngày hẹn</label><input type="date" class="pop-input" id="inp-date"></div>
+          <div class="pop-form-row" style="margin-bottom:0;"><label class="pop-label">Giờ hẹn</label><select class="pop-select" id="inp-time"><option value="">Chọn giờ...</option><option>9:00</option><option>9:30</option><option>10:00</option><option>10:30</option><option>11:00</option><option>11:30</option><option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option><option>16:00</option><option>17:00</option><option>18:00</option><option>19:00</option><option>19:30</option><option>20:00</option></select></div>
+        </div>
+        <div class="pop-form-row"><label class="pop-label">Cơ sở</label><select class="pop-select" id="inp-branch"><option value="">Chọn cơ sở...</option><option>Magnolia Quận 1</option><option>Magnolia Quận 3</option><option>Magnolia Quận 7</option></select></div>
+        <div><label class="pop-label" style="margin-bottom:10px;">Loại phòng</label>
+          <div class="option-grid">
+            <div class="option-card" onclick="selectOption(this,'room','Phòng chung')"><div class="oc-name" style="font-size:16px;">Phòng chung</div><div class="oc-desc" style="margin-top:6px;">Không gian chia sẻ, tiết kiệm hơn.</div></div>
+            <div class="option-card" onclick="selectOption(this,'room','Phòng VIP Private (+80k)')"><div class="oc-name" style="font-size:16px;">VIP Private</div><div class="oc-dur">+80k</div><div class="oc-desc">Chọn mùi hương &amp; âm thanh riêng.</div></div>
+          </div>
+        </div>
+        <div class="popup-nav"><button class="popup-back" onclick="goToStep(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>Quay lại</button><button class="popup-next" onclick="validateStep2()">Tiếp theo →</button></div>
+      </div>
+      <!-- STEP 3 -->
+      <div class="step-pane" id="step-3">
+        <div class="popup-step-title">Thông tin của bạn</div>
+        <div class="popup-step-sub">Chúng tôi sẽ xác nhận qua Zalo hoặc điện thoại.</div>
+        <div class="pop-form-grid">
+          <div class="pop-form-row"><label class="pop-label">Họ và tên</label><input type="text" class="pop-input" id="inp-name" placeholder="Nguyễn Văn An"></div>
+          <div class="pop-form-row"><label class="pop-label">Số điện thoại / Zalo</label><input type="tel" class="pop-input" id="inp-phone" placeholder="0901 234 567"></div>
+        </div>
+        <div class="pop-form-row"><label class="pop-label">Yêu cầu đặc biệt (tuỳ chọn)</label><input type="text" class="pop-input" id="inp-note" placeholder="Dị ứng sản phẩm, kỹ thuật viên ưa thích..."></div>
+        <div class="pop-form-row"><label class="pop-label">Bạn biết MAGNOLIA qua đâu?</label><select class="pop-select" id="inp-source"><option value="">Chọn...</option><option>Instagram / TikTok</option><option>Facebook</option><option>Bạn bè giới thiệu</option><option>Google</option><option>Khác</option></select></div>
+        <div class="popup-nav"><button class="popup-back" onclick="goToStep(2)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>Quay lại</button><button class="popup-next" onclick="validateStep3()">Xem tổng kết →</button></div>
+      </div>
+      <!-- STEP 4 -->
+      <div class="step-pane" id="step-4">
+        <div class="popup-step-title">Xác nhận đặt lịch</div>
+        <div class="popup-step-sub">Kiểm tra lại thông tin và hoàn tất.</div>
+        <div style="background:var(--cream);padding:24px;margin-bottom:20px;line-height:2;"><div style="display:grid;grid-template-columns:110px 1fr;gap:4px 0;font-size:13px;">
+          <span style="font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);padding-top:4px;">Dịch vụ</span><span id="conf-service" style="color:var(--forest);font-weight:400;">—</span>
+          <span style="font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);padding-top:4px;">Ngày giờ</span><span id="conf-datetime" style="color:var(--forest);">—</span>
+          <span style="font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);padding-top:4px;">Cơ sở</span><span id="conf-branch" style="color:var(--forest);">—</span>
+          <span style="font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);padding-top:4px;">Phòng</span><span id="conf-room" style="color:var(--forest);">—</span>
+          <span style="font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);padding-top:4px;">Khách</span><span id="conf-name" style="color:var(--forest);">—</span>
+          <span style="font-family:'Tenor Sans',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);padding-top:4px;">Liên hệ</span><span id="conf-phone" style="color:var(--forest);">—</span>
+        </div></div>
+        <div style="font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.8;">Chúng tôi sẽ xác nhận qua Zalo / điện thoại trong 30 phút. Không yêu cầu đặt cọc.</div>
+        <div class="popup-nav"><button class="popup-back" onclick="goToStep(3)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>Quay lại</button><button class="popup-next" onclick="submitBooking()">Xác nhận đặt lịch</button></div>
+      </div>
+    </div>
+    <div class="popup-success" id="popupSuccess">
+      <div class="success-circle"><svg viewBox="0 0 32 32" fill="none" stroke="#2e3d28" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="14"/><path d="M9 16.5l4.5 4.5 9-9"/></svg></div>
+      <div class="success-title">Đặt lịch thành công!</div>
+      <div class="success-msg">Cảm ơn bạn đã tin tưởng MAGNOLIA.<br>Chúng tôi sẽ liên hệ xác nhận trong <strong style="color:var(--forest);">30 phút</strong> qua Zalo hoặc điện thoại.</div>
+      <div class="success-detail" id="success-summary"></div>
+      <button class="popup-next" style="margin-top:28px;width:100%;" onclick="closePopup()">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const dot=document.getElementById('cursor-dot'),ring=document.getElementById('cursor-ring'),petal=document.getElementById('cursor-petal');
+let mx=0,my=0,rx=0,ry=0,angle=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';angle+=.6;petal.style.left=mx+'px';petal.style.top=my+'px';petal.style.transform=`translate(-50%,-50%) rotate(${angle}deg)`;});
+(function anim(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);})();
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));});
+document.querySelectorAll('.service-card,.ctc,.option-card,.mem-card').forEach(el=>{el.addEventListener('mouseenter',()=>{document.body.classList.remove('cursor-hover');document.body.classList.add('cursor-card');});el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-card'));});
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60));
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:.12});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+function showTab(name,btn){document.querySelectorAll('.service-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));document.getElementById('panel-'+name).classList.add('active');btn.classList.add('active');}
+const expData=[
+  {num:'01',title:'Đón tiếp & chào hỏi',desc:'Nhân viên mở cửa, mời trà thảo mộc và xác nhận lịch hẹn. Không gian tách biệt hoàn toàn với thế giới bên ngoài bằng hương thơm và âm thanh thiên nhiên — bạn bắt đầu thở chậm lại ngay từ bước đầu tiên.',tag:'Hospitality · First Impression'},
+  {num:'02',title:'Khu chờ thư giãn',desc:'Ghế ngồi êm, nhạc nhẹ, trà và bánh nhẹ. Có thể ngâm chân nước ấm hoặc massage chân bằng máy trong lúc chờ. Không gian được thiết kế để tâm trí bắt đầu buông bỏ trước khi dịch vụ chính thức bắt đầu.',tag:'Waiting Experience · Pre-Relax'},
+  {num:'03',title:'Tư vấn cá nhân hóa',desc:'Kỹ thuật viên hỏi về tình trạng da đầu, mong muốn buổi hôm đó, cảm giác cơ thể và tâm trạng. Giới thiệu sản phẩm để bạn lựa chọn và chốt gói dịch vụ phù hợp nhất với bạn hôm nay.',tag:'Consultation · Personalization'},
+  {num:'04',title:'Trải nghiệm dịch vụ',desc:'Gội trị liệu, massage, chăm sóc da — trong không gian được điều chỉnh ánh sáng, hương thơm và âm thanh theo sở thích cá nhân. Mỗi chi tiết đều có chủ đích, mỗi cử chỉ được thực hiện với sự tập trung hoàn toàn.',tag:'Core Service · Multi-Sensory'},
+  {num:'05',title:'Hoàn tất & chăm sóc sau',desc:'Mời trà, gương chỉnh tóc, dầu dưỡng. Nhân viên chia sẻ gợi ý chăm sóc tại nhà. Hệ thống gửi tin nhắn cảm ơn qua Zalo. Gợi ý lịch kế tiếp và ưu đãi membership dành riêng cho bạn.',tag:'Aftercare · Re-booking'},
+];
+function selectStep(idx,el){
+  document.querySelectorAll('.exp-step-h').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  const d=expData[idx];
+  document.getElementById('edpNum').textContent=d.num;
+  document.getElementById('edpTitle').textContent=d.title;
+  document.getElementById('edpDesc').textContent=d.desc;
+  document.getElementById('edpTag').textContent=d.tag;
+  const panel=document.getElementById('expDetail');
+  panel.classList.remove('visible');panel.style.display='none';
+  requestAnimationFrame(()=>{panel.style.display='';requestAnimationFrame(()=>panel.classList.add('visible'));});
+}
+function closeExpDetail(){document.getElementById('expDetail').classList.remove('visible');setTimeout(()=>{document.getElementById('expDetail').style.display='none';},400);document.querySelectorAll('.exp-step-h').forEach(s=>s.classList.remove('active'));}
+const bData={service:'',room:'',date:'',time:'',branch:'',name:'',phone:''};
+function openPopup(){document.getElementById('bookingOverlay').classList.add('open');document.body.style.overflow='hidden';}
+function openPopupWith(svc){
+  bData.service=svc;
+  document.getElementById('preselect-name').textContent=svc;
+  document.getElementById('preselect-badge').style.display='inline-flex';
+  document.querySelectorAll('#step-1 .option-card').forEach(c=>c.classList.remove('selected'));
+  const first=svc.split(' — ')[0].split(' ')[0];
+  document.querySelectorAll('#step-1 .option-card').forEach(c=>{if(c.querySelector('.oc-name')&&c.querySelector('.oc-name').textContent.replace(' ✦','').startsWith(first))c.classList.add('selected');});
+  document.getElementById('btn-next-1').disabled=false;
+  openPopup();
+}
+function closePopup(){document.getElementById('bookingOverlay').classList.remove('open');document.body.style.overflow='';setTimeout(resetPopup,400);}
+function handleOverlayClick(e){if(e.target===document.getElementById('bookingOverlay'))closePopup();}
+function resetPopup(){document.getElementById('popupSuccess').style.display='none';document.getElementById('stepIndicator').style.display='flex';document.querySelectorAll('.step-pane').forEach(p=>p.classList.remove('active'));document.getElementById('step-1').classList.add('active');document.querySelectorAll('.option-card').forEach(c=>c.classList.remove('selected'));document.querySelectorAll('.pop-input,.pop-select').forEach(i=>i.value='');Object.keys(bData).forEach(k=>bData[k]='');document.getElementById('btn-next-1').disabled=true;document.getElementById('preselect-badge').style.display='none';updateDots(1);}
+function goToStep(n){document.querySelectorAll('.step-pane').forEach(p=>p.classList.remove('active'));document.getElementById('step-'+n).classList.add('active');updateDots(n);document.getElementById('bookingPopup').scrollTop=0;}
+function updateDots(a){for(let i=1;i<=4;i++){const d=document.getElementById('dot-'+i);d.classList.remove('active','done');if(i<a)d.classList.add('done');else if(i===a)d.classList.add('active');}for(let i=1;i<=3;i++)document.getElementById('line-'+i).classList.toggle('done',i<a);}
+function selectOption(el,key,val){el.closest('.option-grid').querySelectorAll('.option-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');bData[key]=val;if(key==='service'){document.getElementById('btn-next-1').disabled=false;document.getElementById('preselect-badge').style.display='none';}}
+function validateStep2(){const d=document.getElementById('inp-date').value,t=document.getElementById('inp-time').value,b=document.getElementById('inp-branch').value;if(!d||!t||!b||!bData.room){alert('Vui lòng chọn đầy đủ: ngày, giờ, cơ sở và loại phòng.');return;}bData.date=d;bData.time=t;bData.branch=b;goToStep(3);}
+function validateStep3(){const n=document.getElementById('inp-name').value.trim(),p=document.getElementById('inp-phone').value.trim();if(!n||!p){alert('Vui lòng nhập họ tên và số điện thoại.');return;}bData.name=n;bData.phone=p;document.getElementById('conf-service').textContent=bData.service||'—';const ds=bData.date?new Date(bData.date).toLocaleDateString('vi-VN',{weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'}):'—';document.getElementById('conf-datetime').textContent=ds+' lúc '+bData.time;document.getElementById('conf-branch').textContent=bData.branch||'—';document.getElementById('conf-room').textContent=bData.room||'—';document.getElementById('conf-name').textContent=n;document.getElementById('conf-phone').textContent=p;goToStep(4);}
+function submitBooking(){document.querySelectorAll('.step-pane').forEach(p=>p.classList.remove('active'));document.getElementById('stepIndicator').style.display='none';document.getElementById('popupSuccess').style.display='block';const ds=bData.date?new Date(bData.date).toLocaleDateString('vi-VN',{weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'}):'';document.getElementById('success-summary').innerHTML='<strong>Dịch vụ:</strong> '+bData.service+'<br><strong>Thời gian:</strong> '+ds+' lúc '+bData.time+'<br><strong>Cơ sở:</strong> '+bData.branch+'<br><strong>Khách hàng:</strong> '+bData.name+' · '+bData.phone;document.getElementById('bookingPopup').scrollTop=0;}
+</script>
+</body>
+</html>
